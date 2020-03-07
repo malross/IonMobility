@@ -1,0 +1,47 @@
+﻿<Window x:Class="IonMobility.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IonMobility"
+        mc:Ignorable="d"
+        Title="Ion Mobility Separation" Height="450" Width="800"
+        Background="#444"
+        d:DataContext="{d:DesignInstance local:MobilityCellViewModel}">
+    <Window.Resources>
+        <local:ColorToBrushConverter x:Key="colorToBrushConverter"/>
+        <local:MoleculePositionConverter x:Key="moleculePositionConverter"/>
+        <DataTemplate x:Key="moleculeDataTemplate" DataType="{x:Type local:Molecule}">
+            <Ellipse Fill="{Binding Color, Converter={StaticResource colorToBrushConverter}}" Width="{Binding Diameter}" Height="{Binding Diameter}"/>
+        </DataTemplate>
+    </Window.Resources>
+    <ItemsControl ItemsSource="{Binding Molecules}" ItemTemplate="{StaticResource moleculeDataTemplate}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <Canvas/>
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.ItemContainerStyle>
+            <Style TargetType="FrameworkElement">
+                <Setter Property="Canvas.Left">
+                    <Setter.Value>
+                        <MultiBinding Converter="{StaticResource moleculePositionConverter}">
+                            <Binding Path="Position.X"/>
+                            <Binding Path="ActualWidth" RelativeSource="{RelativeSource AncestorType=ItemsControl}"/>
+                            <Binding Path="Diameter"/>
+                        </MultiBinding>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Canvas.Top">
+                    <Setter.Value>
+                        <MultiBinding Converter="{StaticResource moleculePositionConverter}">
+                            <Binding Path="Position.Y"/>
+                            <Binding Path="ActualHeight" RelativeSource="{RelativeSource AncestorType=ItemsControl}"/>
+                            <Binding Path="Diameter"/>
+                        </MultiBinding>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ItemsControl.ItemContainerStyle>
+    </ItemsControl>
+</Window>
