@@ -15,7 +15,7 @@
             <Ellipse Fill="{Binding Color, Converter={StaticResource colorToBrushConverter}}" Width="{Binding Diameter}" Height="{Binding Diameter}"/>
         </DataTemplate>
     </Window.Resources>
-    <ItemsControl ItemsSource="{Binding Molecules}" ItemTemplate="{StaticResource moleculeDataTemplate}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+    <ItemsControl ItemsSource="{Binding Molecules}" ItemTemplate="{StaticResource moleculeDataTemplate}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MouseDoubleClick="ItemsControl_MouseDoubleClick">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
                 <Canvas/>

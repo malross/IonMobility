@@ -26,5 +26,10 @@ namespace IonMobility
 
             DataContext = new MobilityCellViewModel();
         }
+
+        private void ItemsControl_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            ((MobilityCellViewModel)DataContext).Restart();
+        }
     }
 }

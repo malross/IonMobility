@@ -9,14 +9,13 @@ namespace IonMobility
     {
         private static readonly Random random = new Random(DateTime.Now.Second);
 
-        private Molecule(Color color, double diameter)
+        protected Molecule(Color color, double diameter)
         {
             Color = color;
             Diameter = diameter;
 
             var angle = random.NextDouble() * 360.0;
             Velocity = new Vector(0.02 * Math.Cos(angle), 0.02 * Math.Sin(angle));
-//            Velocity = new Vector(random.NextDouble() / 50.0, random.NextDouble() / 50.0);
             Position = new Point(random.NextDouble(), random.NextDouble());
         }
 
@@ -31,53 +30,16 @@ namespace IonMobility
             set => this.RaiseAndSetIfChanged(ref position, value);
         }
 
-        public void Move()
+        public virtual void Move()
         {
-            var newPosition = new Point(Position.X + Velocity.X, Position.Y + Velocity.Y);
-
-            if (newPosition.X < 0.0)
-            {
-                newPosition.X = -newPosition.X;
-                Velocity = new Vector(-Velocity.X, Velocity.Y);
-            }
-            else if (newPosition.X > 1.0)
-            {
-                newPosition.X = 2.0 - newPosition.X;
-                Velocity = new Vector(-Velocity.X, Velocity.Y);
-            }
-
-            if (newPosition.Y < 0.0)
-            {
-                newPosition.Y = -newPosition.Y;
-                Velocity = new Vector(Velocity.X, -Velocity.Y);
-            }
-            else if (newPosition.Y > 1.0)
-            {
-                newPosition.Y = 2.0 - newPosition.Y;
-                Velocity = new Vector(Velocity.X, -Velocity.Y);
-            }
-
-            Position = newPosition;
+            Position = new Point(Position.X + Velocity.X, Position.Y + Velocity.Y);
         }
 
-        public static Molecule CellGas()
+        public bool CollidesWith(Molecule other)
         {
-            return new Molecule(Colors.CadetBlue, 10);
-        }
-
-        public static Molecule Small()
-        {
-            return new Molecule(Colors.Firebrick, 10);
-        }
-
-        public static Molecule Medium()
-        {
-            return new Molecule(Colors.RoyalBlue, 50);
-        }
-
-        public static Molecule Large()
-        {
-            return new Molecule(Colors.Gold, 100);
+            var touchingDistance = (this.Diameter + other.Diameter) / 2000;
+            return (Math.Abs(this.Position.X - other.Position.X) < touchingDistance)
+                && (Math.Abs(this.Position.Y - other.Position.Y) < touchingDistance);
         }
     }
 }
